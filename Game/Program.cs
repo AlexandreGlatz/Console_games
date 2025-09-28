@@ -1,26 +1,26 @@
-﻿using Render;
+﻿using Graphics;
+using System.Diagnostics;
 
 class Program
 {
     static void Main(string[] args)
     {
-        uint x = 0;
-        float f = 0;
-        bool r = true;
+		Stopwatch watch = new Stopwatch();
+		Image image = new Image("Assets/test.txt");
+
+		double x = 0;
+		watch.Start();
         while (true)
         {
-            if (f >= 100000.0f)
-            {
-                x = r ? x + 1 : x - 1;
+			watch.Restart();
+            Renderer.Instance.Clear();
+            Renderer.Instance.WriteBox((uint) x * 5, 0, 10, 10, TermColors.GREEN);
+			Renderer.Instance.WriteBar((uint) x * 5, 10, 10, 5, TermColors.RED);
+			//Renderer.Instance.WriteImage(x, 0, image, TermColors.BLUE);
+            Renderer.Instance.Present();
+			
 
-                if (x + 10 >= Graphics.ScreenWidth) r = false;
-                else if (x <= 0) r = true;
-                Graphics.Instance.Clear();
-                Graphics.Instance.WriteBox(0, 0, 10, 10);
-                Graphics.Instance.Present();
-                f = 0;
-            }
-            f += 0.016f;
+			x += watch.Elapsed.TotalMilliseconds / 1000.0d;
         }
     }
 }
